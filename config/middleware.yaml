@@ -1,0 +1,6 @@
+---
+foo:
+  priority: 10
+  module: bin/middleware.js
+  arguments:
+    - "Hello worldddd!!!"

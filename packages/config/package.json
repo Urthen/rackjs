@@ -10,6 +10,7 @@
   "license": "BSD-3-Clause",
   "dependencies": {
     "computed-types": "1.11.1",
-    "js-yaml": "4.1.0"
+    "js-yaml": "4.1.0",
+    "js-yaml-js-types": "1.0.0"
   }
 }

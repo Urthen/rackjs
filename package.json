@@ -5,14 +5,20 @@
   "license": "BSD-3-CLAUSE",
   "main": "demo/index.ts",
   "scripts": {
-    "start": "npm run build:ts-watch",
-    "build:ts-watch": "tsc --build --watch & npm run build:nodemon",
+    "start": "npm run watch",
+    "watch": "npm run build:ts-watch & npm run build:nodemon",
+    "build:ts-watch": "tsc --build --watch",
     "build:nodemon": "nodemon -e js,yaml ./bin/index.js"
   },
   "workspaces": [
     "packages/boot",
     "packages/config"
   ],
+  "nodemonConfig": {
+    "events": {
+      "start": "echo -ne '\\ec'"
+    }
+  },
   "devDependencies": {
     "@types/node": "17.0.21",
     "nodemon": "2.0.15",

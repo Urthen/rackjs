@@ -1,8 +1,5 @@
 ---
 app:
-  middleware:
-    foo:
-      priority: 10
-      module: bin/middleware.js
-      arguments:
-        - "Hello world!!!"
+  middleware: !!rack/include middleware.yaml
+
+butts: !!js/regexp /a-z/i

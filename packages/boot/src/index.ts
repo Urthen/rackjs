@@ -6,12 +6,10 @@ import process from "process";
 export class RackBoot {
   app?: Koa;
   private appDir: string;
-  private configPath: string;
   config?: Configuration;
 
-  constructor(configPath: string = "config") {
+  constructor() {
     this.appDir = process.cwd();
-    this.configPath = path.resolve(this.appDir, configPath);
   }
 
   useMiddleware() {
@@ -43,17 +41,25 @@ export class RackBoot {
     });
   }
 
+  loadConfig(configPath: string = "config") {
+    const fullPath = path.resolve(this.appDir, configPath);
+    this.config = ConfigLoader.load({ configPath: fullPath });
+  }
+
+  dumpConfig() {
+    console.log(ConfigLoader.dumpConfig());
+  }
+
   up() {
     if (!this.app) this.app = new Koa();
-
-    this.config = ConfigLoader.load({ configPath: this.configPath });
+    if (!this.config) this.loadConfig();
 
     this.useMiddleware();
 
-    const port = this.config.app.port;
+    const port = process.env.PORT || this.config?.app.port || 3000;
     this.app.listen(port);
     console.log(
-      this.config.app.startupMessage.replace("$PORT", port.toString())
+      this.config?.app.startupMessage.replace("$PORT", port.toString())
     );
   }
 }
