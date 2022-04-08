@@ -1,0 +1,26 @@
+{
+  "name": "@rackjs/rackjs",
+  "description": "Rack - Configuration and Middleware for Node apps",
+  "author": "Michael Pratt",
+  "license": "BSD-3-CLAUSE",
+  "main": "demo/index.ts",
+  "scripts": {
+    "start": "npm run build:ts-watch",
+    "build:ts-watch": "tsc --build --watch & npm run build:nodemon",
+    "build:nodemon": "nodemon -e js,yaml ./bin/index.js"
+  },
+  "workspaces": [
+    "packages/boot",
+    "packages/config"
+  ],
+  "devDependencies": {
+    "@types/node": "17.0.21",
+    "nodemon": "2.0.15",
+    "ts-node": "10.7.0",
+    "tsc-watch": "4.6.2"
+  },
+  "dependencies": {
+    "@types/js-yaml": "4.0.5",
+    "@types/koa": "2.13.4"
+  }
+}
