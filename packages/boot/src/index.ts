@@ -2,22 +2,49 @@ import Koa from "koa";
 import ConfigLoader, { Configuration } from "@rackjs/config";
 import path from "path";
 import process from "process";
+import { strict as assert } from "assert";
 
 export class RackBoot {
   app?: Koa;
   private appDir: string;
-  config?: Configuration;
+  private _config?: Configuration;
 
   constructor() {
     this.appDir = process.cwd();
   }
 
+  get config(): Configuration {
+    assert(this._config, "Configuration must be loaded before it can be used");
+    return this._config as Configuration;
+  }
+
   useMiddleware() {
-    if (!this.config)
-      throw Error("Config must be loaded before middleware can be used");
     if (!this.app) throw Error("App must be set before middleware can be used");
 
-    Object.values(this.config.app.middleware).forEach((middlewareDef) => {
+    const middlewareOrder = Object.keys(this.config.app.middleware).sort(
+      (a, b): number => {
+        const mwA = this.config.app.middleware[a];
+        const mwB = this.config.app.middleware[b];
+
+        assert(mwA.priority, `Middleware ${a} requires a priority.`);
+        assert(mwB.priority, `Middleware ${a} requires a priority.`);
+        assert.notEqual(
+          mwA.priority,
+          mwB.priority,
+          `Middleware ${a} and ${b} have the same priority ${mwA.priority}`
+        );
+
+        return mwA.priority - mwB.priority;
+      }
+    );
+
+    console.log("Middleware Order:");
+    middlewareOrder.forEach((name) => {
+      console.log(`${name}: ${this.config.app.middleware[name].priority}`);
+    });
+
+    middlewareOrder.forEach((name) => {
+      const middlewareDef = this.config.app.middleware[name];
       try {
         let middleware = require(path.resolve(
           this.appDir,
@@ -43,7 +70,7 @@ export class RackBoot {
 
   loadConfig(configPath: string = "config") {
     const fullPath = path.resolve(this.appDir, configPath);
-    this.config = ConfigLoader.load({ configPath: fullPath });
+    this._config = ConfigLoader.load({ configPath: fullPath });
   }
 
   dumpConfig() {

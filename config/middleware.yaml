@@ -3,4 +3,10 @@ foo:
   priority: 10
   module: bin/middleware.js
   arguments:
-    - "Hello worldddd!!!"
+    - "Hey there neighbor"
+
+bar:
+  priority: 5
+  module: bin/middleware.js
+  arguments:
+    - "Crazy times"
