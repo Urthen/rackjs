@@ -36,7 +36,7 @@ export class RackBoot {
 
         this.app?.use(middleware);
       } catch (err) {
-        throw Error(`Error loading middleware ${middlewareDef.name}:\n${err}`);
+        throw Error(`Loading middleware ${middlewareDef.name}:\n${err}`);
       }
     });
   }

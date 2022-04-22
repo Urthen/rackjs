@@ -2,4 +2,5 @@
 app:
   middleware: !!rack/include middleware.yaml
 
-butts: !!js/regexp /a-z/i
+test:
+  regexp: !!js/regexp /Hello/i
